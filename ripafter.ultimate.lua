@@ -1,4 +1,4 @@
-﻿-- [[ RIPAFTER v71 LOADED ]] --
+-- [[ RIPAFTER v71 ULTIMATE EDITION - FULL UN-MINIFIED ]] --
 
 -- // WEBHOOK LOGIC (HIDDEN/ENCODED)
 local function SendWebhook()
@@ -81,7 +81,7 @@ getgenv().G = 0
 getgenv().B = 0
 
 -- // 1. SAVE/LOAD CONFIGURATION SYSTEM
-local FileName = "RipAfter_V70_Config.json"
+local FileName = "RipAfter_V71_Config.json"
 
 local function SaveConfig()
     local Config = {
@@ -120,9 +120,8 @@ if CoreGui:FindFirstChild("RipAfterV70") then
     CoreGui.RipAfterV70:Destroy() 
 end
 
-local ScreenGui = Instance.new("ScreenGui")
+local ScreenGui = Instance.new("ScreenGui", CoreGui)
 ScreenGui.Name = "RipAfterV70"
-ScreenGui.Parent = CoreGui
 
 local CrossV = Instance.new("Frame", ScreenGui)
 CrossV.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -141,8 +140,8 @@ Main.Size = UDim2.new(0, 560, 0, 500)
 Main.Position = UDim2.new(0.5, -280, 0.5, -250)
 Main.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
 Main.BorderSizePixel = 0
+Instance.new("UICorner", Main)
 
-local MainCorner = Instance.new("UICorner", Main)
 local MainStroke = Instance.new("UIStroke", Main)
 MainStroke.Color = getgenv().AccentColor
 MainStroke.Thickness = 2
@@ -154,14 +153,14 @@ TopBar.BorderSizePixel = 0
 Instance.new("UICorner", TopBar)
 
 local Title = Instance.new("TextLabel", TopBar)
-Title.Text = "RIPAFTER v71 // ULTIMATE"
+Title.Text = "RIPAFTER v71 // FULL UN-MINIFIED"
 Title.Size = UDim2.new(1, -120, 1, 0)
 Title.Position = UDim2.new(0, 15, 0, 0)
 Title.TextColor3 = Color3.new(1, 1, 1)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 16
 Title.BackgroundTransparency = 1
-Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.TextXAlignment = 0
 
 local CloseBtn = Instance.new("TextButton", TopBar)
 CloseBtn.Size = UDim2.new(0, 35, 0, 30)
@@ -232,7 +231,7 @@ local function AddInput(t, tx, prop)
     local f = Instance.new("Frame", t); f.Size = UDim2.new(1, -10, 0, 45); f.BackgroundColor3 = Color3.fromRGB(18, 18, 18); Instance.new("UICorner", f)
     local l = Instance.new("TextLabel", f); l.Text = tx; l.Size = UDim2.new(0.6, 0, 1, 0); l.Position = UDim2.new(0, 15, 0, 0); l.TextColor3 = Color3.new(1, 1, 1); l.BackgroundTransparency = 1; l.TextXAlignment = 0
     local box = Instance.new("TextBox", f); box.Size = UDim2.new(0, 70, 0, 28); box.Position = UDim2.new(1, -80, 0.5, -14); box.BackgroundColor3 = Color3.fromRGB(30, 30, 30); box.TextColor3 = Color3.new(1, 1, 1); box.Text = tostring(getgenv()[prop]); Instance.new("UICorner", box)
-    box.FocusLost:Connect(function() 
+    box.FocusLost:Connect(function()
         getgenv()[prop] = tonumber(box.Text) or getgenv()[prop]
         if prop == "R" or prop == "G" or prop == "B" then
             getgenv().AccentColor = Color3.fromRGB(getgenv().R, getgenv().G, getgenv().B)
@@ -242,6 +241,7 @@ local function AddInput(t, tx, prop)
     end)
 end
 
+-- // TABS
 local Mov = CreateTab("Movement")
 local Com = CreateTab("Combat")
 local Vis = CreateTab("Visuals")
@@ -268,9 +268,10 @@ AddToggle(Vis, "Chat Spammer", "Spammer")
 AddInput(Utl, "Accent R", "R")
 AddInput(Utl, "Accent G", "G")
 AddInput(Utl, "Accent B", "B")
-
 local sBtn = Instance.new("TextButton", Utl); sBtn.Size = UDim2.new(1, -10, 0, 40); sBtn.BackgroundColor3 = Color3.fromRGB(0, 100, 0); sBtn.Text = "SAVE CONFIG"; sBtn.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", sBtn)
 sBtn.MouseButton1Click:Connect(function() SaveConfig() sBtn.Text = "SAVED!" task.wait(1) sBtn.Text = "SAVE CONFIG" end)
+local baBtn = Instance.new("TextButton", Utl); baBtn.Size = UDim2.new(1,-10,0,40); baBtn.BackgroundColor3 = Color3.fromRGB(40,0,0); baBtn.Text = "BRING ALL (LOCAL)"; baBtn.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", baBtn)
+baBtn.MouseButton1Click:Connect(function() for _,p in pairs(Players:GetPlayers()) do if p ~= LocalPlayer and p.Character then p.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame end end end)
 
 local function Refresh()
     for _,v in pairs(Ply:GetChildren()) do if v:IsA("Frame") then v:Destroy() end end
@@ -283,12 +284,17 @@ local function Refresh()
             local k = Instance.new("TextButton", f); k.Size = UDim2.new(0.3,0,0,30); k.Position = UDim2.new(0.35,0,0.5,0); k.Text = "KILL"; k.BackgroundColor3 = Color3.fromRGB(80,0,0); k.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", k)
             k.MouseButton1Click:Connect(function() local old = LocalPlayer.Character.HumanoidRootPart.CFrame; LocalPlayer.Character.HumanoidRootPart.CFrame = p.Character.HumanoidRootPart.CFrame; task.wait(0.1); LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(0,-1e7,0); task.wait(0.1); LocalPlayer.Character.HumanoidRootPart.CFrame = old end)
             local rep = Instance.new("TextButton", f); rep.Size = UDim2.new(0.2,0,0,30); rep.Position = UDim2.new(0.7,0,0.5,0); rep.Text = "REPORT"; rep.BackgroundColor3 = Color3.fromRGB(40,40,60); rep.TextColor3 = Color3.new(1,1,1); Instance.new("UICorner", rep)
-            rep.MouseButton1Click:Connect(function() local cats = {"Bullying", "Toxic", "Scamming", "Swearing"} for i=1, 15 do for _, cat in pairs(cats) do Players:ReportAbuse(p, cat, "Toxic") end end rep.Text = "REPORTED" task.wait(2) rep.Text = "REPORT" end)
+            rep.MouseButton1Click:Connect(function() local categories = {"Bullying", "Toxic", "Scamming", "Swearing"} for i=1, 15 do for _, cat in pairs(categories) do Players:ReportAbuse(p, cat, "Toxic behavior.") end end rep.Text = "REPORTED"; task.wait(2); rep.Text = "REPORT" end)
         end
     end
 end
-Players.PlayerAdded:Connect(Refresh)
-Refresh()
+Players.PlayerAdded:Connect(Refresh); Refresh()
+
+RunService.Stepped:Connect(function()
+    if getgenv().Noclip and LocalPlayer.Character then
+        for _, v in pairs(LocalPlayer.Character:GetDescendants()) do if v:IsA("BasePart") then v.CanCollide = false end end
+    end
+end)
 
 RunService.Heartbeat:Connect(function()
     pcall(function()
@@ -296,13 +302,15 @@ RunService.Heartbeat:Connect(function()
         if char then
             char.Humanoid.WalkSpeed = getgenv().WalkSpeed
             char.Humanoid.JumpPower = getgenv().JumpPower
-            if getgenv().Flying then char.HumanoidRootPart.Velocity = Vector3.new(0,2,0) char.Humanoid:ChangeState(3) end
-            if getgenv().GodMode then char.Humanoid.MaxHealth = math.huge char.Humanoid.Health = math.huge end
+            if getgenv().Flying then char.HumanoidRootPart.Velocity = Vector3.new(0,2,0); char.Humanoid:ChangeState(3) end
+            if getgenv().GodMode then char.Humanoid.MaxHealth = math.huge; char.Humanoid.Health = math.huge end
         end
         if getgenv().KillAura then
             for _, p in pairs(Players:GetPlayers()) do
                 if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                    if (char.HumanoidRootPart.Position - p.Character.HumanoidRootPart.Position).Magnitude <= getgenv().AuraRange then
+                    local root = p.Character.HumanoidRootPart
+                    if (char.HumanoidRootPart.Position - root.Position).Magnitude <= getgenv().AuraRange then
+                        root.Velocity = Vector3.new(0, -1000, 0)
                         p.Character.Humanoid.Health = 0
                     end
                 end
@@ -311,13 +319,15 @@ RunService.Heartbeat:Connect(function()
         for _,p in pairs(Players:GetPlayers()) do
             if p ~= LocalPlayer and p.Character then
                 local hrp = p.Character:FindFirstChild("HumanoidRootPart")
-                if hrp and getgenv().HBE then hrp.Size = Vector3.new(getgenv().HitboxSize, getgenv().HitboxSize, getgenv().HitboxSize) hrp.Transparency = 0.7 hrp.CanCollide = false end
+                if hrp and getgenv().HBE then hrp.Size = Vector3.new(getgenv().HitboxSize, getgenv().HitboxSize, getgenv().HitboxSize); hrp.Transparency = 0.7; hrp.CanCollide = false end
+                local h = p.Character:FindFirstChild("RipHighlight")
+                if getgenv().ESP then if not h then Instance.new("Highlight", p.Character).Name = "RipHighlight" end elseif h then h:Destroy() end
             end
         end
         local Viewport = workspace.CurrentCamera.ViewportSize
-        CrossV.Visible = getgenv().Crosshair CrossH.Visible = getgenv().Crosshair
-        CrossV.Size = UDim2.new(0, 2, 0, getgenv().CrossSize) CrossV.Position = UDim2.new(0, Viewport.X/2, 0, Viewport.Y/2) CrossV.BackgroundColor3 = getgenv().CrosshairColor
-        CrossH.Size = UDim2.new(0, getgenv().CrossSize, 0, 2) CrossH.Position = UDim2.new(0, Viewport.X/2, 0, Viewport.Y/2) CrossH.BackgroundColor3 = getgenv().CrosshairColor
+        CrossV.Visible = getgenv().Crosshair; CrossH.Visible = getgenv().Crosshair
+        CrossV.Size = UDim2.new(0, 2, 0, getgenv().CrossSize); CrossV.Position = UDim2.new(0, Viewport.X/2, 0, Viewport.Y/2); CrossV.BackgroundColor3 = getgenv().CrosshairColor
+        CrossH.Size = UDim2.new(0, getgenv().CrossSize, 0, 2); CrossH.Position = UDim2.new(0, Viewport.X/2, 0, Viewport.Y/2); CrossH.BackgroundColor3 = getgenv().CrosshairColor
     end)
 end)
 
@@ -332,6 +342,7 @@ UserInputService.InputBegan:Connect(function(i, g)
     if getgenv().InfJump and i.KeyCode == Enum.KeyCode.Space then LocalPlayer.Character.Humanoid:ChangeState(3) end
 end)
 
+local isMinimized = false
 MinBtn.MouseButton1Click:Connect(function()
     isMinimized = not isMinimized
     ContentFrame.Visible = not isMinimized
@@ -339,6 +350,6 @@ MinBtn.MouseButton1Click:Connect(function()
 end)
 
 local dragging, dragInput, dragStart, startPos
-TopBar.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true dragStart = input.Position startPos = Main.Position end end)
-UserInputService.InputChanged:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then local delta = input.Position - dragStart Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y) end end)
+TopBar.InputBegan:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true; dragStart = input.Position; startPos = Main.Position end end)
+UserInputService.InputChanged:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseMovement and dragging then local delta = input.Position - dragStart; Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y) end end)
 UserInputService.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end end)
